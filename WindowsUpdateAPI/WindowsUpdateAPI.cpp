@@ -10,24 +10,6 @@
 #include <cstdio>
 #include <array>
 
-//#include "json11.hpp"
-
-//using namespace json11;
-
-/*Json GetUpdateJson(IUpdate* update)
-{
-    Json updateJson = Json::object{};
-
-    BSTR title;
-    update->get_Title(&title);
-    updateJson["Title"] = L"" + title;
-    SysFreeString(title);
-
-    
-
-    return updateJson;
-}*/
-
 std::wstring getTimeString() {
   std::time_t currentTime;
   std::tm localTime;
@@ -82,7 +64,6 @@ int main()
 
         std::wstring serviceIDString = L"9482F4B4-E343-43B6-B170-9A65BC822C77";
         std::wstring criteriaString = L"(IsInstalled=0 AND IsHidden=1) OR (IsInstalled=0 AND IsHidden=0)";
-        std::wstring a;
 
         std::wcout.imbue(std::locale(""));
         file.imbue(std::locale(""));
@@ -91,16 +72,16 @@ int main()
         std::wcout << getTimeString() << L"Run command: Get Window version" << std::endl;
         file << getTimeString() << L"Run command: Get Window version" << std::endl;
         command = L"powershell -Command \"& { systeminfo | findstr /B /C:'OS Name' /B /C:'OS Version' }\" 2>&1";
-        FILE* pipe4 = _wpopen(command.c_str(), L"rt, ccs=UTF-8");
-        if (pipe4 == nullptr) {
+        FILE* pipe = _wpopen(command.c_str(), L"rt, ccs=UTF-8");
+        if (pipe == nullptr) {
           throw std::runtime_error("Error opening pipe to PowerShell command");
         }
-        std::array<wchar_t, 128> buffer4;
-        while (fgetws(buffer4.data(), static_cast<int>(buffer4.size()), pipe4) != nullptr) {
-          std::wcout << buffer4.data();
-          file << buffer4.data();
+        std::array<wchar_t, 128> buffer;
+        while (fgetws(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
+          std::wcout << buffer.data();
+          file << buffer.data();
         }
-        if (_pclose(pipe4) == -1) {
+        if (_pclose(pipe) == -1) {
           throw std::runtime_error("Error closing pipe to PowerShell command");
         }
         std::wcout << getTimeString() << L"Done" << std::endl;
@@ -425,16 +406,16 @@ int main()
             file << getTimeString() << L"Run command: Install-Module -Name PSWindowsUpdate -Force" << std::endl;
 
             command = L"powershell -Command \"& { Install-Module -Name PSWindowsUpdate -Force }\" 2>&1";
-            FILE* pipe = _wpopen(command.c_str(), L"rt, ccs=UTF-8");
-            if (pipe == nullptr) {
+            FILE* pipe1 = _wpopen(command.c_str(), L"rt, ccs=UTF-8");
+            if (pipe1 == nullptr) {
               throw std::runtime_error("Error opening pipe to PowerShell command");
             }
-            std::array<wchar_t, 128> buffer;
-            while (fgetws(buffer.data(), static_cast<int>(buffer.size()), pipe) != nullptr) {
-              std::wcout << buffer.data();
-              file << buffer.data();
+            std::array<wchar_t, 128> buffer1;
+            while (fgetws(buffer1.data(), static_cast<int>(buffer1.size()), pipe1) != nullptr) {
+              std::wcout << buffer1.data();
+              file << buffer1.data();
             }
-            if (_pclose(pipe) == -1) {
+            if (_pclose(pipe1) == -1) {
               throw std::runtime_error("Error closing pipe to PowerShell command");
             }
             std::wcout << getTimeString() << L"Done" << std::endl;
@@ -482,11 +463,7 @@ int main()
             std::wcout << getTimeString() << L"====================================================================================" << std::endl;
             file << getTimeString() << L"====================================================================================" << std::endl;
             std::wcout << std::endl << std::endl;
-
-        /*    std::wcout << L"Press Enter 2 time to run again";
-            std::wcin.ignore();
-            std::getline(std::wcin, a);
-        }*/
+        //}
         file.close();
     }
 }

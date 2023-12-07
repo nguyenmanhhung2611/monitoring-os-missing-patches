@@ -33,7 +33,9 @@
 
 # Visual Studio
 *.vs
-/x64
-/WindowsUpdateAPI/x64
-/WindowsUpdateAPI/Release
+x64/
+WindowsUpdateAPI/x64/
+WindowsUpdateAPI/Release/
+WindowsUpdateAPI/LogSearchUpdateWindow.txt
+
 
